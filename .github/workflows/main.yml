@@ -7,13 +7,15 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       matrix:
         platform: [x64, x86]
     steps:
       - uses: actions/checkout@v4
       - uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: '[17.0,18.0)'
       - name: Test Codex collector and version comparisons
         shell: pwsh
         run: ./scripts/test-codex.ps1

@@ -17,7 +17,7 @@ git archive --format=zip "--output=$archive" HEAD
 if ($LASTEXITCODE) { throw 'git archive failed.' }
 Expand-Archive -LiteralPath $archive -DestinationPath $source
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-$vs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.ATLMFC -property installationPath
+$vs = & $vswhere -latest -version '[17.0,18.0)' -products '*' -requires Microsoft.VisualStudio.Component.VC.ATLMFC -property installationPath
 if (!$vs) { throw 'Visual Studio 2022 with C++ and MFC is required. Source artifacts were preserved.' }
 $msbuild = Join-Path $vs 'MSBuild\Current\Bin\MSBuild.exe'
 & (Join-Path $source 'scripts\test-codex.ps1')
