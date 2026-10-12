@@ -2,6 +2,7 @@
 #include "DisplayItem.h"
 #include "Common.h"
 #include "TrafficMonitor.h"
+#include "CodexTelemetryView.h"
 
 CommonDisplayItem::CommonDisplayItem(DisplayItem item)
 {
@@ -66,6 +67,7 @@ CString CommonDisplayItem::GetItemName() const
     {
         switch (item_type)
         {
+        case TDI_CODEX_SPEED: return CCommon::LoadText(IDS_CODEX_SPEED);
         case TDI_UP: return CCommon::LoadText(IDS_UPLOAD);
         case TDI_DOWN: return CCommon::LoadText(IDS_DOWNLOAD);
         case TDI_TOTAL_SPEED: return CCommon::LoadText(IDS_TOTAL_NET_SPEED);
@@ -99,6 +101,9 @@ std::wstring CommonDisplayItem::DefaultString(bool is_main_window) const
     {
         switch (item_type)
         {
+        case TDI_CODEX_SPEED:
+            default_text = L"Codex: ";
+            break;
         case TDI_UP:
             if (is_main_window)
                 default_text = CCommon::LoadText(IDS_UPLOAD_DISP, _T(": "));
@@ -163,6 +168,7 @@ const wchar_t* CommonDisplayItem::GetItemIniKeyName() const
     {
         switch (item_type)
         {
+        case TDI_CODEX_SPEED: return L"codex_speed_string";
         case TDI_UP: return L"up_string";
         case TDI_DOWN: return L"down_string";
         case TDI_CPU: return L"cpu_string";
@@ -198,6 +204,9 @@ CString CommonDisplayItem::GetItemValueText(bool is_main_window) const
         CString str_value;
         switch (item_type)
         {
+        case TDI_CODEX_SPEED:
+            str_value = CCodexTelemetryView::SpeedText(theApp.m_codex.GetSnapshot());
+            break;
         //上传、下载、总网速
         case TDI_UP:
         case TDI_DOWN:
@@ -287,6 +296,9 @@ CString CommonDisplayItem::GetItemValueSampleText(bool is_main_window) const
         CString sample_str;
         switch (item_type)
         {
+        case TDI_CODEX_SPEED:
+            sample_str = L"123.4 token/s";
+            break;
         case TDI_UP:
             sample_str = _T("88.8 KB/s");
             break;
@@ -324,6 +336,9 @@ CString CommonDisplayItem::GetItemValueSampleText(bool is_main_window) const
         switch (item_type)
         {
         //网速
+        case TDI_CODEX_SPEED:
+            sample_str = L"9999.9 token/s";
+            break;
         case TDI_UP:
         case TDI_DOWN:
         case TDI_TOTAL_SPEED:

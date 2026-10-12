@@ -808,13 +808,11 @@ bool CCommon::GetURL(const wstring& url, std::string& result, const wstring& use
         pfile->QueryInfoStatusCode(dwStatusCode);
         if (dwStatusCode == HTTP_STATUS_OK)
         {
-            CString content;
-            CString data;
-            while (pfile->ReadString(data))
-            {
-                content += data;
-            }
-            result = std::string((const char*)content.GetString());
+            result.clear();
+            char buffer[8192];
+            UINT read{};
+            while ((read = pfile->Read(buffer, sizeof(buffer))) != 0)
+                result.append(buffer, read);
             succeed = true;
         }
         pfile->Close();

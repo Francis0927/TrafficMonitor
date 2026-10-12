@@ -270,10 +270,9 @@ BOOL CGeneralSettingsDlg::OnInitDialog()
     }
     CheckDlgButton(IDC_SHOW_NOTIFY_ICON_CHECK, m_data.show_notify_icon);
 
-    if (m_data.update_source == 0)
-        CheckDlgButton(IDC_GITHUB_RADIO, TRUE);
-    else
-        CheckDlgButton(IDC_GITEE_RADIO, TRUE);
+    m_data.update_source = 0;
+    CheckDlgButton(IDC_GITHUB_RADIO, TRUE);
+    EnableDlgCtrl(IDC_GITEE_RADIO, FALSE);
 
     //检查开始菜单的“启动”目录下有没有程序的快捷方式，如果有则设置开机自启动，然后删除快捷方式
     wstring start_up_path = CCommon::GetStartUpPath();
@@ -695,8 +694,8 @@ void CGeneralSettingsDlg::OnBnClickedGithubRadio()
 void CGeneralSettingsDlg::OnBnClickedGiteeRadio()
 {
     // TODO: 在此添加控件通知处理程序代码
-    m_data.update_source = 1;
-    theApp.m_general_data.update_source = 1;
+    m_data.update_source = 0;
+    theApp.m_general_data.update_source = 0;
 }
 
 

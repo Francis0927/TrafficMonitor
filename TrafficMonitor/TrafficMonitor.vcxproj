@@ -771,6 +771,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\PluginInterface.h" />
+    <ClInclude Include="CodexTelemetry.h" />
+    <ClInclude Include="CodexTelemetryView.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="AdapterCommon.h" />
     <ClInclude Include="AppAlreadyRuningDlg.h" />
@@ -873,6 +875,8 @@
     <ClInclude Include="WinVersionHelper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CodexTelemetry.cpp" />
+    <ClCompile Include="CodexTelemetryView.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="AdapterCommon.cpp" />
     <ClCompile Include="AppAlreadyRuningDlg.cpp" />

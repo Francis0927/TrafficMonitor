@@ -1,3 +1,5 @@
+> For this fork, see the [Codex guide](./docs/CODEX.md) and use [its Releases](https://github.com/Francis0927/TrafficMonitor/releases). The original feature FAQ is retained below.
+
 **[简体中文](./Help.md) | English**
 
 # TrafficMonitor Frequently Asked Questions

@@ -25,7 +25,6 @@ public:
     bool IsRowData();
 
 private:
-    void ParseUpdateInfo(wstring version_info);
 
 private:
     std::wstring m_version;

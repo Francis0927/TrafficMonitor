@@ -1,146 +1,62 @@
 **简体中文 | [English](./README_en-us.md)**
 
-[![Badge](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg?style=flat-square)](https://996.icu/#/en_US)
-[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=flat-square)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zhongyang219/TrafficMonitor/main.yml?branch=master&label=Release%20CI&logo=github&style=flat-square)](https://github.com/zhongyang219/TrafficMonitor/actions?query=workflow:"Release+CI")
-[![GitHub release](https://img.shields.io/github/release/zhongyang219/TrafficMonitor.svg?style=flat-square)](https://github.com/zhongyang219/TrafficMonitor/releases/latest)
+# TrafficMonitor · Codex fork
 
-<a href="https://hellogithub.com/repository/5ef48af2b2794d4798b17d6539ec7305" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=5ef48af2b2794d4798b17d6539ec7305&claim_uid=CeVqou2T1dIvfQP" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+[![Windows CI](https://github.com/Francis0927/TrafficMonitor/actions/workflows/main.yml/badge.svg)](https://github.com/Francis0927/TrafficMonitor/actions/workflows/main.yml)
+[![Release](https://img.shields.io/github/v/release/Francis0927/TrafficMonitor)](https://github.com/Francis0927/TrafficMonitor/releases/latest)
 
-# TrafficMonitor 简介
+这是 [zhongyang219/TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor) 的 fork，保留 Windows 网速、CPU、内存、任务栏窗口、皮肤和插件功能，新增原生 **Codex 输出速度与额度显示**。本 fork 独立发布，原作者不负责本 fork 的修改。
 
-Traffic Monitor是一款用于Windows平台的网速监控悬浮窗软件，可以显示当前网速、CPU及内存利用率，支持嵌入到任务栏显示，支持更换皮肤、历史流量统计等功能。
+当前开发版本：**1.87.0**。正式下载以 [本仓库 GitHub Releases](https://github.com/Francis0927/TrafficMonitor/releases) 为准；源码版本不代表已发布。
 
-# 相关链接：
+## Codex 功能
 
-请[点击此处](https://github.com/zhongyang219/TrafficMonitor/releases/latest)下载TrafficMonitor的最新版本。
+- 任务栏显示 `Codex: 速度 token/s`，默认只选择速度项目。
+- 悬停显示五小时、一周剩余额度、各自重置时间及额度采集时间。
+- 只读本地 Codex 日志，支持 `CODEX_HOME` 和 `%USERPROFILE%\.codex`。
+- 后台增量读取，采用 15 秒指数平滑；无需插件、Node.js 或同时运行 CodexSpeedVisualizer。
+- 缺失额度显示“暂无数据”，重置时间过去后提示等待新数据，不猜测剩余值。
 
-备用链接：[百度网盘下载](https://pan.baidu.com/s/15PMt7s-ASpyDwtS__4cUhg) 提取码：`ou0m`
+额度来自本机日志的最后快照，其他设备的用量需要等待新的本地日志反映。[数据口径和常见问题](./docs/CODEX.md)。
 
-国内用户如果遇到Github下载缓慢的问题，可以[点击此处](https://gitee.com/zhongyang219/TrafficMonitor)转到此项目在Gitee上的页面。
+## 下载与使用
 
-如果遇到问题，请[点击此处](./Help.md)查看常见问题。
+1. 从 [Releases](https://github.com/Francis0927/TrafficMonitor/releases/latest) 下载 x64 或 x86 ZIP，并核对 `SHA256SUMS.txt`。
+2. 解压运行 `TrafficMonitor.exe`，保留 ZIP 内附带的运行库 DLL。
+3. 右键选择“显示任务栏窗口”，打开任务栏“显示设置”，仅勾选“Codex 输出速度”。
+4. 保持鼠标提示开启；悬停查看额度和刷新时间。
 
-你也可以[点击此处](https://github.com/zhongyang219/TrafficMonitor/actions?query=workflow:"Release+CI")下载TrafficMonitor的预发行构建版本。
+新配置的任务栏默认只选择 Codex 速度。旧配置保留原项目选择，需要按步骤 3 切换。原有悬浮窗和皮肤继续可用，悬浮窗鼠标提示同样包含 Codex 详情。
 
-从1.80版本开始，TrafficMonitor加入了温度监控功能，如果你不需要温度监控功能，并且在使用1.80以上版本中遇到了问题，建议下载不含温度监控的版本（Lite版本）。（在Release页面找到文件名包含`Lite`的版本。）
+发布包面向 Windows 10/11，使用上游 Lite 构建，不含内置温度监控。若需要温度监控，可参考原作者的 [硬件监控插件](https://github.com/zhongyang219/TrafficMonitorPlugins)。
 
-TrafficMonitor依赖于Microsoft Visual C++ 运行环境，如果程序启动时提示“找不到MSVC*.dll”，请点击以下链接下载并安装Microsoft Visual C++ 运行环境。
+## 更新
 
-[最新支持的 Visual C++ 可再发行程序包下载 | Microsoft Docs](https://docs.microsoft.com/zh-CN/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+本 fork 只检查 [Francis0927/TrafficMonitor 正式 Releases](https://github.com/Francis0927/TrafficMonitor/releases/latest)。启动检查默认开启；发现新版本后打开对应架构下载链接，由用户退出程序后替换文件，保留配置。上游用户需手动迁移一次。Gitee、网盘和内网共享不是本 fork 的发布渠道。
 
-# 版本说明
+## 文档
 
-TrafficMonitor提供了标准版和Lite版两种版本可用。标准版包含了所有的功能，Lite版本则不包含温度监控、显卡利用率、硬盘利用率等硬件监控功能。标准版运行需要管理员权限，而Lite版本则不需要。
+- [Codex 使用与数据说明](./docs/CODEX.md)
+- [Fork 修改说明与维护约定](./docs/CHANGES.md)
+- [更新日志](./CHANGELOG.md) / [上游历史日志](./UpdateLog/update_log.md)
+- [发布版本规则](./docs/RELEASE_RULES.md)
+- [原有功能常见问题](./Help.md)
+- [上游功能 Wiki](https://github.com/zhongyang219/TrafficMonitor/wiki)
+- [皮肤制作教程](./皮肤制作教程.md)
 
-如果没有监控温度等硬件信息的需要，建议使用Lite版。
+## 构建与发布
 
-以下是两个版本功能对比。
+完整构建需要 Visual Studio 2022、C++、MFC、Windows SDK 和 v143 工具集。独立采集测试只需要 C++ 工具。
 
-| 功能                          | 标准版 | Lite版 |
-| ----------------------------- | ------ | ------ |
-| 网速监控                      | ✔      | ✔      |
-| CPU、内存利用率          | ✔      | ✔      |
-| CPU、显卡、硬盘、主板温度监控  | ✔      | ❌      |
-| CPU频率监控 | ✔ | ✔ |
-| 显卡利用率监控                | ✔      | ✔     |
-| 硬盘利用率监控                | ✔      | ✔     |
-| 网络详细信息                  | ✔      | ✔      |
-| 插件系统                      | ✔      | ✔      |
-| 主窗口更换皮肤                | ✔      | ✔      |
-| 需要管理员权限                | 是     | 否     |
+```powershell
+./scripts/test-codex.ps1
+# 提交并推送后构建隔离包
+./scripts/build-release.ps1 -Version 1.87.0
+./scripts/publish-github.ps1 -Version 1.87.0 -NotesFile docs/releases/v1.87.0.md
+```
 
-注：从1.86版本开始，TrafficMonitor Lite版也提供了显卡和硬盘利用率监控功能，相比标准版仅少了温度监控功能。后续TrafficMonitor中的温度监控功能将不再维护，TrafficMonitor将不再提供标准版，仅提供Lite版。温度监控功能已经迁移到了[硬件监控插件](https://github.com/zhongyang219/TrafficMonitorPlugins/blob/main/download/plugin_download.md#%E7%A1%AC%E4%BB%B6%E7%9B%91%E6%8E%A7%E6%8F%92%E4%BB%B6)，如果需要使用温度监控功能，请下载硬件监控插件。
+也可使用 GitHub Actions 的 **Codex release** 工作流，默认仅构建，勾选 `publish` 后按规则发布。全部附件通过远端 SHA-256 校验后才将草稿转为正式版。
 
-# 主要特性
+## 来源与许可
 
-* 显示当前实现网络传输速率、CPU和内存占用率
-* 如果电脑有多个网卡，支持自动和手动选择网络连接
-* 查看网络详细信息
-* 支持嵌入到任务栏显示
-* 支持更换皮肤和自定义皮肤
-* 历史流量统计
-* 硬件信息监控
-* 插件系统
-# 使用说明
-
-**[点击这里](https://github.com/zhongyang219/TrafficMonitor/wiki)转到Wiki页面查看关于TrafficMonitor的详细说明文档。**
-
-# 截图
-
-主悬浮窗：
-![](./Screenshots/main1.png)
-
-右键菜单：
-![](./Screenshots/main.png)
-
-任务栏窗口：
-
-![](./Screenshots/taskbar.PNG)
-
-多彩皮肤：
-<img src="./Screenshots/skins.PNG" style="zoom:80%;" />
-
-# 如何使用
-程序启动后在会在屏幕中显示一个显示网速的悬浮窗。在悬浮窗上点击鼠标右键可以弹出右键菜单。
-
-TrafficMonitor支持将信息显示到任务栏。但是TrafficMonitor默认只显示主窗口（悬浮窗），如果需要让它嵌入到任务栏显示，请在右键菜单中选择“显示任务栏窗口”命令。
-
-任务栏窗口支持自定义显示项目，默认情况下只显示网速，如果需要显示CPU和内存利用率等其他信息，请在任务栏窗口右键菜单中选择“显示设置”，在弹出的“显示设置”对话框中勾选需要显示的项目，如下图所示：
-
-<img src="./Screenshots/taskbar_item_settings.png" style="zoom:80%;" />
-
-# 自定义皮肤
-<img src="./Screenshots/selecte_skin.png" style="zoom:80%;" />
-
-在主窗口或通知区图标右键菜单上选择“其他功能”——“更换皮肤”可以打开更换皮肤界面。[点击此处](https://github.com/zhongyang219/TrafficMonitorSkin/blob/master/皮肤下载.md)可以下载更多皮肤。用户还可以根据自己的需要编辑自己的皮肤。
-
-皮肤文件放在程序所在目录的`skins`目录下，每个皮肤被放到单独的文件夹下，文件夹的名称就是皮肤的名称。
-
-其中`background.bmp`和`background_l.bmp`是背景图片，`skin.ini`是皮肤的配置文件，可以通过`skin.ini`指定文本颜色、字体、皮肤作者、每个项目的大小和位置等信息。
-
-从1.80版本开始增加了xml格式的皮肤配置文件`skin.xml`，只有xml格式的皮肤配置文件才支持温度和显卡使用率显示。
-
-从1.85版本开始增加了对png格式背景图片的支持，你可以使用png格式来制作带透明背景的皮肤，背景图片的文件名为`background.png`和`background_l.png`。
-
-详细的皮肤制作教程请点击以下链接：
-
-[皮肤制作教程 · zhongyang219/TrafficMonitor Wiki (github.com)](https://github.com/zhongyang219/TrafficMonitor/wiki/皮肤制作教程)
-
-# 选项设置
-<img src="./Screenshots/option.jpg" style="zoom:80%;" />
-
-在右键菜单选择“选项...”可以进入选项设置。在选项设置对话框中，可以单独设置主窗口和任务栏窗口的文本颜色、字体、背景颜色、网速单位、显示的文本等。
-
-在“常规设置”选项卡中，可以设置是否在程序时自动检查更新，以及是否需要在开机是自动运行。可以设置在什么时候需要发出消息通知。
-
-从1.72版本开始，支持每个项目文本颜色单独设置。勾选“指定每个项目的颜色”后，点击“文本颜色”右边的颜色框，会弹出详细颜色设置的对话框，可以在这里单独指定每个项目的颜色。
-
-# 插件系统
-
-从1.82版本开始增加了插件系统，插件dll必须放在“TrafficMonitor.exe”同级目录的“plugins”目录下。程序启动后，插件会自动加载。你可以在右键菜单“更多功能”——“插件管理”中查看并管理已加载的插件。
-
-关于如何开发TrafficMonitor的说明，请参见[插件开发指南 · zhongyang219/TrafficMonitor Wiki (github.com)](https://github.com/zhongyang219/TrafficMonitor/wiki/插件开发指南)。
-
-要下载TrafficMonitor插件，请[点击这里](https://github.com/zhongyang219/TrafficMonitorPlugins/blob/main/download/plugin_download.md)。
-
-# 关于硬件监控功能
-
-从1.80版本开始，TrafficMonitor加入了硬件监控功能（包括温度监控和显卡使用率监控、CPU频率监控），它使用了第三方开源库[LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)。如果你在使用温度监控功能时遇到了问题，请[点击这里](./Help.md#13-关于trafficmonitor温度监控的问题)。
-
-需要注意的是，温度监控功能默认是关闭的，如果你要使用TrafficMonitor的温度监控功能，请到[“选项设置”-“常规设置”-“硬件监控”](https://github.com/zhongyang219/TrafficMonitor/wiki/选项设置#硬件监控)中开启。
-
-**注意：硬件监控功能（包括温度监控和显卡使用率监控）可能存在一些问题，它可能会占用更多的CPU和内存。据部分用户反馈，开启温度功能后会导致程序崩溃和系统死机等问题，请在知晓以上风险后再决定开启硬件监控功能。否则，请不要使用硬件监控功能。**
-
-# 更新日志
-
-**[点击此处查看更新日志](./UpdateLog/update_log.md)**
-
-# 声明
-
-域名`www.trafficmonitor.cn`和作者本人**没有任何关系**，TrafficMonitor目前并没有官网，任何所谓的“TrafficMonitor官网”都是盗版网站，请不要访问此类网站，也不要通过此类网站下载TrafficMonitor。TrafficMonitor仅通过以下渠道向用户提供：
-
-* [GitHub页面（github.com/zhongyang219/TrafficMonitor）](https://github.com/zhongyang219/TrafficMonitor)
-* [Gitee页面（gitee.com/zhongyang219/TrafficMonitor）](https://gitee.com/zhongyang219/TrafficMonitor)
-* [作者本人的百度网盘共享链接](https://pan.baidu.com/s/15PMt7s-ASpyDwtS__4cUhg) 提取码：`ou0m`
-
+原项目作者：zhongyang219；原项目 [Anti-996 许可](./LICENSE) 与 [中文许可](./LICENSE_CN) 保留。Codex 日志算法参考 [Francis0927/CodexSpeedVisualizer](https://github.com/Francis0927/CodexSpeedVisualizer)。JSON 解析器 [nlohmann/json 3.12.0](https://github.com/nlohmann/json/releases/tag/v3.12.0) 使用 MIT 许可，附带原始许可文件。原项目截图位于 `Screenshots`，新增功能以当前说明为准。

@@ -1,3 +1,5 @@
+> 本 fork 的 Codex 功能请见 [使用说明](./docs/CODEX.md)，正式下载和更新仅使用 [本仓库 Releases](https://github.com/Francis0927/TrafficMonitor/releases)。下文保留上游原有功能 FAQ。
+
 **简体中文 | [English](./Help_en-us.md)**
 
 ## TrafficMonitor 常见问题

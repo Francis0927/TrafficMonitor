@@ -9,6 +9,7 @@
 #endif
 
 #include "resource.h"       // 主符号
+#include "CodexTelemetry.h"
 #include "Common.h"
 #include "WinVersionHelper.h"
 #include "SimpleXML.h"
@@ -70,6 +71,7 @@ public:
     //选项设置数据
     MainWndSettingData m_main_wnd_data;
     TaskBarSettingData m_taskbar_data;
+    codex::Collector m_codex;
     GeneralSettingData m_general_data;
     //其他设置数据
     MainConfigData m_cfg_data;

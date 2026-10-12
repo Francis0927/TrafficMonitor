@@ -3,6 +3,7 @@
 //
 
 #include "stdafx.h"
+#include "ReleaseVersion.h"
 #include "TrafficMonitor.h"
 #include "TrafficMonitorDlg.h"
 #include "crashtool.h"
@@ -71,8 +72,7 @@ void CTrafficMonitorApp::LoadConfig()
     //m_general_data.allow_skin_cover_font = ini.GetBool(_T("general"), _T("allow_skin_cover_font"), true);
     //m_general_data.allow_skin_cover_text = ini.GetBool(_T("general"), _T("allow_skin_cover_text"), true);
     m_general_data.show_all_interface = ini.GetBool(L"general", L"show_all_interface", false);
-    bool is_chinese_language{ m_str_table.IsSimplifiedChinese() };     //当前语言是否为简体中文
-    m_general_data.update_source = ini.GetInt(L"general", L"update_source", is_chinese_language ? 1 : 0);   //如果当前语言为简体，则默认更新源为Gitee，否则为GitHub
+    m_general_data.update_source = 0; // This fork checks only its GitHub Releases.
     m_general_data.cpu_usage_acquire_method = static_cast<GeneralSettingData::CpuUsageAcquireMethod>(ini.GetInt(L"general", L"cpu_usage_acquire_method", GeneralSettingData::CA_PDH));
     m_general_data.monitor_time_span = ini.GetInt(L"general", L"monitor_time_span", 1000);
     if (m_general_data.monitor_time_span < MONITOR_TIME_SPAN_MIN || m_general_data.monitor_time_span > MONITOR_TIME_SPAN_MAX)
@@ -171,7 +171,7 @@ void CTrafficMonitorApp::LoadConfig()
     ini.LoadTaskbarWndColors(_T("task_bar"), _T("task_bar_text_color"), m_taskbar_data.text_colors, m_taskbar_data.dft_text_colors);
     m_taskbar_data.specify_each_item_color = ini.GetBool(L"task_bar", L"specify_each_item_color", false);
     //m_cfg_data.m_tbar_show_cpu_memory = ini.GetBool(_T("task_bar"), _T("task_bar_show_cpu_memory"), false);
-    m_taskbar_data.display_item.FromInt(ini.GetInt(L"task_bar", L"tbar_display_item", DisplayItemSet{ TDI_UP, TDI_DOWN }.ToInt()));
+    m_taskbar_data.display_item.FromInt(ini.GetInt(L"task_bar", L"tbar_display_item", DisplayItemSet{ TDI_CODEX_SPEED }.ToInt()));
     m_taskbar_data.show_taskbar_wnd_in_secondary_display = ini.GetBool(L"task_bar", L"show_taskbar_wnd_in_secondary_display", false);
     m_taskbar_data.secondary_display_index = ini.GetInt(L"task_bar", L"secondary_display_index", 0);
 
@@ -256,7 +256,23 @@ void CTrafficMonitorApp::LoadConfig()
         m_taskbar_data.auto_set_background_color = false;
 
     m_taskbar_data.item_order.Init();
-    m_taskbar_data.item_order.FromString(ini.GetString(L"task_bar", L"item_order", L""));
+    auto item_order = ini.GetString(L"task_bar", L"item_order", L"");
+    if (!item_order.empty() && ini.GetInt(L"task_bar", L"codex_item_order_schema", 0) == 0)
+    {
+        // Built-in item insertion shifts saved plugin indices by one.
+        vector<wstring> indices;
+        CCommon::StringSplit(item_order, L',', indices);
+        item_order.clear();
+        const int old_builtin_count = static_cast<int>(AllDisplayItems.size()) - 1;
+        for (const auto& value : indices)
+        {
+            int index = _wtoi(value.c_str());
+            if (index >= old_builtin_count) ++index;
+            if (!item_order.empty()) item_order += L',';
+            item_order += std::to_wstring(index);
+        }
+    }
+    m_taskbar_data.item_order.FromString(item_order);
     m_taskbar_data.plugin_display_item.FromString(ini.GetString(L"task_bar", L"plugin_display_item", L""));
     m_taskbar_data.auto_save_taskbar_color_settings_to_preset = ini.GetBool(L"task_bar", L"auto_save_taskbar_color_settings_to_preset", true);
 
@@ -413,6 +429,7 @@ void CTrafficMonitorApp::SaveConfig()
     ini.WriteBool(L"task_bar", L"auto_set_background_color", m_taskbar_data.auto_set_background_color);
 
     ini.WriteString(L"task_bar", L"item_order", m_taskbar_data.item_order.ToString());
+    ini.WriteInt(L"task_bar", L"codex_item_order_schema", 1);
     ini.WriteString(L"task_bar", L"plugin_display_item", m_taskbar_data.plugin_display_item.ToString());
     ini.WriteBool(L"task_bar", L"auto_save_taskbar_color_settings_to_preset", m_taskbar_data.auto_save_taskbar_color_settings_to_preset);
 
@@ -572,7 +589,7 @@ void CTrafficMonitorApp::CheckUpdate(bool message)
         }
         return;
     }
-    if (version > VERSION)      //如果服务器上的版本大于本地版本
+    if (ReleaseVersion::Newer(CCommon::UnicodeToStr(version.c_str(), true), CCommon::UnicodeToStr(VERSION, true)))      //如果服务器上的版本大于本地版本
     {
         CString info;
         //根据语言设置选择对应语言版本的更新内容
@@ -1027,6 +1044,7 @@ BOOL CTrafficMonitorApp::InitInstance()
 
     //从ini文件载入设置
     LoadConfig();
+    m_codex.Start();
 
     m_taskbar_default_style.LoadConfig();
 
@@ -1336,9 +1354,9 @@ void CTrafficMonitorApp::OnHelp()
     // TODO: 在此添加命令处理程序代码
     CString help_url;
     if (m_str_table.IsSimplifiedChinese())
-        help_url = _T("https://github.com/zhongyang219/TrafficMonitor/wiki");
+        help_url = _T("https://github.com/Francis0927/TrafficMonitor/blob/master/README.md");
     else
-        help_url = _T("https://github.com/zhongyang219/TrafficMonitor/wiki/Home_en");
+        help_url = _T("https://github.com/Francis0927/TrafficMonitor/blob/master/README_en-us.md");
     ShellExecute(NULL, _T("open"), help_url, NULL, NULL, SW_SHOW);
 }
 
@@ -1347,17 +1365,14 @@ void CTrafficMonitorApp::OnFrequentyAskedQuestions()
 {
     // TODO: 在此添加命令处理程序代码
     CString url_domain;
-    if (static_cast<CUpdateHelper::UpdateSource>(m_general_data.update_source) == CUpdateHelper::UpdateSource::GiteeSource)
-        url_domain = _T("gitee.com");
-    else
-        url_domain = _T("github.com");
+    url_domain = _T("github.com");
     CString file_name;
     if (m_str_table.IsSimplifiedChinese())
         file_name = _T("Help.md");
     else
         file_name = _T("Help_en-us.md");
     CString url;
-    url.Format(_T("https://%s/zhongyang219/TrafficMonitor/blob/master/%s"), url_domain.GetString(), file_name.GetString());
+    url.Format(_T("https://%s/Francis0927/TrafficMonitor/blob/master/%s"), url_domain.GetString(), file_name.GetString());
     ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOW);
 }
 
@@ -1366,10 +1381,7 @@ void CTrafficMonitorApp::OnUpdateLog()
 {
     // TODO: 在此添加命令处理程序代码
     CString url_domain;
-    if (static_cast<CUpdateHelper::UpdateSource>(m_general_data.update_source) == CUpdateHelper::UpdateSource::GiteeSource)
-        url_domain = _T("gitee.com");
-    else
-        url_domain = _T("github.com");
+    url_domain = _T("github.com");
     wstring language_tag = m_str_table.GetLanguageInfo().bcp_47;
     CString file_name;
     if (language_tag == L"zh-CN")
@@ -1379,13 +1391,14 @@ void CTrafficMonitorApp::OnUpdateLog()
     else
         file_name = _T("update_log_en-us.md");
     CString url;
-    url.Format(_T("https://%s/zhongyang219/TrafficMonitor/blob/master/UpdateLog/%s"), url_domain.GetString(), file_name.GetString());
+    url.Format(_T("https://%s/Francis0927/TrafficMonitor/blob/master/UpdateLog/%s"), url_domain.GetString(), file_name.GetString());
     ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOW);
 }
 
 
 int CTrafficMonitorApp::ExitInstance()
 {
+    m_codex.Stop();
     // 释放GDI+
     Gdiplus::GdiplusShutdown(m_gdiplusToken);
 

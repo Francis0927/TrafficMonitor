@@ -1,0 +1,41 @@
+name: Codex release
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the verified release after building
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: codex-release
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build and verify isolated stable packages
+        shell: pwsh
+        run: ./scripts/build-release.ps1
+      - name: Preserve packages and build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TrafficMonitor-v1.87.0
+          path: |
+            artifacts/release-*/TrafficMonitor-*.zip
+            artifacts/release-*/SHA256SUMS.txt
+            artifacts/release-*/README.txt
+            artifacts/release-*/commit.txt
+            artifacts/release-*/build-*.log
+          if-no-files-found: warn
+      - name: Upload draft, verify downloaded assets, then publish
+        if: inputs.publish
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./scripts/publish-github.ps1

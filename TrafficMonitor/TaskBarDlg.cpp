@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "CodexTelemetryView.h"
 #include "TrafficMonitor.h"
 #include "TaskBarDlg.h"
 #include "afxdialogex.h"
@@ -723,6 +724,7 @@ CString CTaskBarDlg::GetMouseTipsInfo()
 
     //添加插件项目的鼠标提示
     tip_info += theApp.GetPlauginTooltipInfo().c_str();
+    tip_info += CCodexTelemetryView::Tooltip(theApp.m_codex.GetSnapshot());
 
     return tip_info;
 }
