@@ -875,7 +875,9 @@
     <ClInclude Include="WinVersionHelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CodexTelemetry.cpp" />
+    <ClCompile Include="CodexTelemetry.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="CodexTelemetryView.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="AdapterCommon.cpp" />
